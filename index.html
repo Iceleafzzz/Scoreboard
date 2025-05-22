@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>比赛记分表</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    table { border-collapse: collapse; width: 400px; margin-bottom: 30px; }
+    th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
+    th { background: #eee; }
+    input { padding: 5px; }
+    #add { margin-left: 10px; }
+  </style>
+</head>
+<body>
+  <h1>比赛记分表</h1>
+  <form id="form" autocomplete="off">
+    姓名: <input type="text" id="name" required>
+    分数: <input type="number" id="score" required>
+    <button type="submit" id="add">添加</button>
+  </form>
+  <table>
+    <thead>
+      <tr><th>排名</th><th>姓名</th><th>分数</th></tr>
+    </thead>
+    <tbody id="scoreboard"></tbody>
+  </table>
+  <script>
+    let players = [];
+
+    function renderTable() {
+      // 排序：分数从高到低
+      players.sort((a, b) => b.score - a.score);
+      let html = '';
+      players.forEach((p, i) => {
+        html += `<tr><td>${i + 1}</td><td>${p.name}</td><td>${p.score}</td></tr>`;
+      });
+      document.getElementById('scoreboard').innerHTML = html;
+    }
+
+    document.getElementById('form').onsubmit = function(e) {
+      e.preventDefault();
+      let name = document.getElementById('name').value.trim();
+      let score = parseInt(document.getElementById('score').value);
+      if (name && !isNaN(score)) {
+        players.push({ name, score });
+        renderTable();
+        this.reset();
+      }
+    }
+  </script>
+</body>
+</html>
